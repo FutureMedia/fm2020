@@ -1,10 +1,10 @@
 // https://www.cobosrl.co/
 
-import "./styles.css";
+import "./style.scss";
 import SimplexNoise from "simplex-noise";
 import * as THREE from "three";
 import { GPUComputationRenderer } from "three/examples/jsm/misc/GPUComputationRenderer.js";
-import { TweenLite } from "gsap";
+import { gsap } from "gsap";
 
 function isMobile() {
   return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -14,23 +14,23 @@ function isMobile() {
 const WIDTH = isMobile() ? 64 : 128,
   BOUNDS = 512,
   initialState = {
-    uFrequency: 0.9,
-    uAmplitude: 0.9,
-    speedTime: 2
+    uFrequency: 0.6,
+    uAmplitude: 2.5,
+    speedTime: 1
   },
   mouseDownState = {
-    uFrequency: 2,
+    uFrequency: 5,
     uAmplitude: 0.3,
     speedTime: 1
   };
 let effectController = {
-  mouseSize: 20,
+  mouseSize: 10,
   viscosity: 0.9
 };
 
 class App {
   constructor() {
-    (this.speedTime = 1),
+    (this.speedTime = 0.3),
       (this.time = 0),
       (this.clock = new THREE.Clock()),
       (this.mouse = new THREE.Vector2(1e3, 1e3)),
@@ -56,7 +56,7 @@ class App {
       alpha: true
     })),
       this.renderer.setSize(window.innerWidth, window.innerHeight),
-      document.querySelector("main").appendChild(this.renderer.domElement),
+      document.getElementById("blob").appendChild(this.renderer.domElement),
       (this.scene = new THREE.Scene()),
       (this.camera = new THREE.PerspectiveCamera(
         45,
@@ -68,7 +68,7 @@ class App {
       (this.lightTop = new THREE.DirectionalLight(16777215, 0.65)),
       this.lightTop.position.set(0, 500, 200),
       this.scene.add(this.lightTop),
-      (this.lightBottom = new THREE.DirectionalLight(16777215, 0.1)),
+      (this.lightBottom = new THREE.DirectionalLight(16777215, 0.3)),
       this.lightBottom.position.set(0, -500, 400),
       this.scene.add(this.lightBottom);
     let e = new THREE.AmbientLight(1053224, 0.7);
@@ -259,16 +259,16 @@ class App {
 
     (t = Math.max(Math.min(t, 1), -1)),
       (i = Math.max(Math.min(i, 1), -1)),
-      TweenLite.to(this.lightBottom.position, 0.75, {
+      gsap.to(this.lightBottom.position, 0.75, {
         x: 1e3 * t - 600,
         y: 1e3 * i - 100
       }),
-      TweenLite.to([this.blob.rotation, this.shadowBlob.rotation], 0.25, {
+      gsap.to([this.blob.rotation, this.shadowBlob.rotation], 0.25, {
         y: THREE.Math.degToRad(25 * t - 45) / 2
       }),
       (this.mouse.x = t),
       (this.mouse.y = i),
-      TweenLite.to([this.blob.position, this.shadowBlob.position], 1, {
+      gsap.to([this.blob.position, this.shadowBlob.position], 1, {
         x: t / 2,
         y: i / 2,
         z: -i
@@ -280,43 +280,42 @@ class App {
   }
   onMouseDown(e) {
     (this.mouseDown = !0),
-      TweenLite.to(this.blob.material.uniforms.uAmplitude, 2, {
+      gsap.to(this.blob.material.uniforms.uAmplitude, {
+        duration: 2,
         value: mouseDownState.uAmplitude,
-        ease: Elastic.easeOut.config(1, 0.3)
+        ease: elastic(1, 0.3)
       }),
-      TweenLite.to(this.blob.material.uniforms.uFrequency, 0.5, {
+      gsap.to(this.blob.material.uniforms.uFrequency, 0.5, {
         value: mouseDownState.uFrequency
       }),
-      TweenLite.to(this, 0.5, {
+      gsap.to(this, {
+        duration: 0.5,
         speedTime: mouseDownState.speedTime
       }),
-      TweenLite.to(
-        this.heightmapVariable.material.uniforms.viscosityConstant,
-        0.5,
-        {
-          value: 0
-        }
-      );
+      gsap.to(this.heightmapVariable.material.uniforms.viscosityConstant, {
+        duration: 0.5,
+        value: 0
+      });
   }
   onMouseUp(e) {
     (this.mouseDown = !1),
-      TweenLite.to(this.blob.material.uniforms.uAmplitude, 2, {
+      gsap.to(this.blob.material.uniforms.uAmplitude, {
+        duration: 2,
         value: initialState.uAmplitude,
-        ease: Elastic.easeOut.config(1, 0.3)
+        ease: elastic(1, 0.3)
       }),
-      TweenLite.to(this.blob.material.uniforms.uFrequency, 0.5, {
+      gsap.to(this.blob.material.uniforms.uFrequency, {
+        duration: 0.5,
         value: initialState.uFrequency
       }),
-      TweenLite.to(this, 0.5, {
+      gsap.to(this, {
+        duration: 0.5,
         speedTime: initialState.speedTime
       }),
-      TweenLite.to(
-        this.heightmapVariable.material.uniforms.viscosityConstant,
-        0.5,
-        {
-          value: effectController.viscosity
-        }
-      );
+      Tgsap.to(this.heightmapVariable.material.uniforms.viscosityConstant, {
+        duration: 0.5,
+        value: effectController.viscosity
+      });
   }
   onWindowResize() {
     (this.camera.aspect = window.innerWidth / window.innerHeight),

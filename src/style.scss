@@ -1,0 +1,95 @@
+@import url("https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap");
+
+@import 'default';
+
+*,
+:after,
+:before {
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #fff;
+}
+
+main {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+  overflow: hidden;
+}
+
+.pageContainer {
+  position: relative;
+  will-change: transform;
+}
+
+.block {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+
+  &__background {
+    position: absolute;
+    width: 100%;
+    height: calc(100% + 2px);
+    top: -1px;
+    left: 0;
+    background-repeat: no-repeat;
+  }
+
+  &--sect1{
+    canvas {
+      z-index: -1;
+      background: #FE4700; // #fe5514;
+      /* background: radial-gradient(ellipse at center, #eef0f2 0, #90a2b2 100%);*/
+    }
+  }
+}
+
+.hero {
+  width: 100vw;
+  min-height: 100vh;
+  background: #fe5514;
+  opacity: 0.8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    font-family: "Abril Fatface", cursive;
+    font-size: 6vw;
+    font-weight: normal;
+    line-height: 1.1;
+    color: #fff;
+    margin: 0;
+
+    @media screen and (orientation:portrait) {
+      font-size: 8vw;
+    }
+  }
+
+}
