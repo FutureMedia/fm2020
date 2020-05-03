@@ -12,7 +12,7 @@ function isMobile() {
   );
 }
 const WIDTH = isMobile() ? 64 : 128,
-  BOUNDS = 512,
+  BOUNDS = 764,
   initialState = {
     uFrequency: 0.6,
     uAmplitude: 2.5,
@@ -23,6 +23,7 @@ const WIDTH = isMobile() ? 64 : 128,
     uAmplitude: 0.3,
     speedTime: 1
   };
+
 let effectController = {
   mouseSize: 10,
   viscosity: 0.9
@@ -282,10 +283,11 @@ class App {
     (this.mouseDown = !0),
       gsap.to(this.blob.material.uniforms.uAmplitude, {
         duration: 2,
-        value: mouseDownState.uAmplitude,
-        ease: elastic(1, 0.3)
+        ease: "elastic(1, 0.3)",
+        value: mouseDownState.uAmplitude
       }),
-      gsap.to(this.blob.material.uniforms.uFrequency, 0.5, {
+      gsap.to(this.blob.material.uniforms.uFrequency, {
+        duration: 0.5,
         value: mouseDownState.uFrequency
       }),
       gsap.to(this, {
@@ -302,7 +304,7 @@ class App {
       gsap.to(this.blob.material.uniforms.uAmplitude, {
         duration: 2,
         value: initialState.uAmplitude,
-        ease: elastic(1, 0.3)
+        ease: "elastic(1, 0.3)"
       }),
       gsap.to(this.blob.material.uniforms.uFrequency, {
         duration: 0.5,
@@ -312,7 +314,7 @@ class App {
         duration: 0.5,
         speedTime: initialState.speedTime
       }),
-      Tgsap.to(this.heightmapVariable.material.uniforms.viscosityConstant, {
+      gsap.to(this.heightmapVariable.material.uniforms.viscosityConstant, {
         duration: 0.5,
         value: effectController.viscosity
       });
